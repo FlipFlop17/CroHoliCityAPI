@@ -1,0 +1,14 @@
+﻿//uskrs i tjelovo se računaju po gregorijanskom kalendaru
+[
+  { "01.01": "Nova godina" },
+  { "06.01": "Sveta tri kralja" },
+  { "01.05": "Praznik rada" },
+  { "30.05": "Dan državnosti" },
+  { "22.06": "Dan antifašističke borbe" },
+  { "05.08": "Dan pobjede i domovinske zahvalnosti" },
+  { "15.08": "Velika Gospa" },
+  { "01.11": "Svi sveti" },
+  { "18.11": "Dan sjećanja na žrtve Domovinskog rata" },
+  { "25.12": "Božić" },
+  { "26.12": "Sveti Stjepan" }
+]
