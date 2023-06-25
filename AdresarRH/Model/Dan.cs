@@ -8,11 +8,11 @@ namespace CroHoliCityAPI.Model
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public DateTime Datum { get; set; }
+        public string Datum { get; set; }
         public bool NeradniDan { get; set; }
         public string NazivDan { get; set; }
         public string Opis { get; set; }
-        public DateTime VrijediOd { get; set; }=DateTime.Now;
+        public DateTime VrijediOd { get; set; }=DateTime.Now.ToUniversalTime();
         public DateTime? VrijediDo { get; set; }
     }
 }

@@ -30,7 +30,7 @@ namespace CroHoliCityAPI.Utilities
 						Naziv= worksheet.Cell(row, 2).Value.ToString(),
 						Naselje = worksheet.Cell(row, 3).Value.ToString(),
 						Zupanija = worksheet.Cell(row, 4).Value.ToString(),
-						VrijediOd=DateTime.Now,
+						VrijediOd=DateTime.Now.ToUniversalTime(),
 					};
 
 					db.Lokacije.Add(entity);
@@ -57,7 +57,7 @@ namespace CroHoliCityAPI.Utilities
 
                 Dan neradniDan = new Dan()
 				{
-					Datum = DateTime.Parse(property.Name, CultureInfo.CreateSpecificCulture("hr-RH")),
+					Datum = property.Name,
 					Opis = property.Value.ToString(),
 					NazivDan= DateTime.Parse(property.Name, CultureInfo.CreateSpecificCulture("hr-RH")).ToString("dddd", CultureInfo.CreateSpecificCulture("hr-RH")),
 					NeradniDan=true
@@ -65,10 +65,15 @@ namespace CroHoliCityAPI.Utilities
 				db.Kalendar.Add(neradniDan);
 			}
 			DateTime uskrsDatum= Helpers.CalculateEasterDate(DateTime.Now.Year);
-			db.Kalendar.Add(new Dan() { Datum = uskrsDatum, Opis = "Uskrs", NazivDan = uskrsDatum.ToString("dddd",CultureInfo.CreateSpecificCulture("hr-RH")),
+			db.Kalendar.Add(new Dan() { Datum = uskrsDatum.ToString(), 
+				Opis = "Uskrs", 
+				NazivDan = uskrsDatum.ToString("dddd",CultureInfo.CreateSpecificCulture("hr-RH")),
 				NeradniDan=true });
 			DateTime tjelovoDatum= Helpers.CalculateTjelovoDate(DateTime.Now.Year);
-			db.Kalendar.Add(new Dan() { Datum = tjelovoDatum, Opis = "Tjelovo", NazivDan = tjelovoDatum.ToString("dddd",CultureInfo.CreateSpecificCulture("hr-RH")),
+			db.Kalendar.Add(new Dan() { 
+				Datum = tjelovoDatum.ToString(), 
+				Opis = "Tjelovo", 
+				NazivDan = tjelovoDatum.ToString("dddd",CultureInfo.CreateSpecificCulture("hr-RH")),
 				NeradniDan = true
 			});
 
