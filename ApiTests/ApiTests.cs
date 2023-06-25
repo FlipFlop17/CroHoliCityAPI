@@ -24,7 +24,8 @@ namespace ApiTests
         public void ConnectToDatabaseLocal()
         {
             // Arrange
-            var connectionString = "Server=localhost;Port=5432;Database=FlipFlop;user id=postgres;sslmode=prefer;";
+            var connectionString = "Server=ec2-54-73-22-169.eu-west-1.compute.amazonaws.com;Port=5432;Database=dcm5coup0n2mft;user id=gmsetbvmbliyjq;" +
+                "Password=582719ff0900fc2317e3d9ea3bc9d3a6e0494c6f3a78c1de6246907a1155dd6a;sslmode=prefer;";
 
             // Act
             var connection = new NpgsqlConnection(connectionString);
