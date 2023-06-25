@@ -27,7 +27,7 @@ builder.Services.AddSerilog(options =>
 /******************************DATA********************************/
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PostgresSQL"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresSQL"));
 });
 
 

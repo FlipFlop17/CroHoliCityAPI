@@ -1,6 +1,7 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using Npgsql;
 using System;
 using System.Data;
 
@@ -23,10 +24,10 @@ namespace ApiTests
         public void ConnectToDatabaseLocal()
         {
             // Arrange
-            var connectionString = "Server=localhost port=5433 dbname=postgres user=postgres sslmode=prefer connect_timeout=10";
+            var connectionString = "Server=localhost;Port=5432;Database=FlipFlop;user id=postgres;sslmode=prefer;";
 
             // Act
-            var connection = new SqlConnection(connectionString);
+            var connection = new NpgsqlConnection(connectionString);
             connection.Open();
 
             // Assert
