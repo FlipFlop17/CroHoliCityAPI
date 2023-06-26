@@ -2,12 +2,11 @@ using AspNetCoreRateLimit;
 using CroHoliCityAPI.Data;
 using CroHoliCityAPI.Repository;
 using CroHoliCityAPI.Repository.IRepository;
-using CroHoliCityAPI.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
 using Serilog;
+using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,19 +16,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 /*****************************LOGING*********************************/
 builder.Services.AddSerilog(options =>
 {
     options.WriteTo.Console();
 });
-
-/******************************DATA********************************/
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-{
-    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQLHeroku"));
-});
-
 
 /******************************SERVICES********************************/
 builder.Services.AddTransient<IlokacijeRepo, LokacijeRepo>();
@@ -40,6 +31,15 @@ builder.Services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
 builder.Services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
 builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
 builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+builder.Configuration.AddEnvironmentVariables();
+Debug.Print("env string: "+builder.Configuration["DATABASE_URL"]);
+/******************************DATA********************************/
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    string url = builder.Configuration["DATABASE_URL"];
+    string conString=BuildConnectionStringFromUrl(url);
+    options.UseNpgsql(conString);
+});
 /******************************VERSIONING********************************/
 builder.Services.AddApiVersioning(options =>
 {
@@ -95,4 +95,17 @@ app.Run();
 
 
 // Run this  update the database:
+static string BuildConnectionStringFromUrl(string databaseUrl)
+{
+    var uri = new Uri(databaseUrl);
 
+    string host = uri.Host;
+    int port = uri.Port;
+    string database = uri.AbsolutePath.TrimStart('/');
+    string username = uri.UserInfo.Split(':')[0];
+    string password = uri.UserInfo.Split(':')[1];
+
+    string connectionString = $"Server={host};Port={port};Database={database};User Id={username};Password={password};SSL Mode=Require;Trust Server Certificate=true";
+
+    return connectionString;
+}
