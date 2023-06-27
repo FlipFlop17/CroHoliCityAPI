@@ -1,1 +1,1 @@
-﻿web: dotnet CroHoliCityAPI.dll
+﻿web: dotnet CroHoliCityAPI.dll --urls=http://0.0.0.0:$PORT

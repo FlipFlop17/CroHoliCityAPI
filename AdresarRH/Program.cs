@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using Serilog.Events;
+using System;
 using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +21,9 @@ builder.Services.AddSwaggerGen();
 /*****************************LOGING*********************************/
 builder.Services.AddSerilog(options =>
 {
+    options.MinimumLevel.Debug();
+    options.MinimumLevel.Override("Microsoft", LogEventLevel.Information);
+    options.WriteTo.Debug();
     options.WriteTo.Console();
 });
 
@@ -32,14 +37,18 @@ builder.Services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounte
 builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
 builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
 builder.Configuration.AddEnvironmentVariables();
-Debug.Print("env string: "+builder.Configuration["DATABASE_URL"]);
+//Debug.Print("env string: "+builder.Configuration["DATABASE_URL"]);
 /******************************DATA********************************/
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     string url = builder.Configuration["DATABASE_URL"];
+    // log mysql connection string
+    Log.Information("url1: " + builder.Configuration["DATABASE_URL"]);
     string conString=BuildConnectionStringFromUrl(url);
     options.UseNpgsql(conString);
 });
+
+Log.Information("url1: " + builder.Configuration["DATABASE_URL"]);
 /******************************VERSIONING********************************/
 builder.Services.AddApiVersioning(options =>
 {
@@ -98,7 +107,6 @@ app.Run();
 static string BuildConnectionStringFromUrl(string databaseUrl)
 {
     var uri = new Uri(databaseUrl);
-
     string host = uri.Host;
     int port = uri.Port;
     string database = uri.AbsolutePath.TrimStart('/');

@@ -29,6 +29,7 @@ namespace CroHoliCityAPI.Controllers.v1
             _memoryCacher = memoryCacher;
             _policyStore = policyStore;
             _response=new ApiResponse();
+            _logger.LogInformation("KalendarController created");
         }
 
         [HttpGet]
