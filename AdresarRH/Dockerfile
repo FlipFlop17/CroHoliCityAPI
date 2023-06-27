@@ -22,7 +22,7 @@ WORKDIR /app
 COPY --from=build /app/out ./
 
 # Expose the required port
-EXPOSE 80
+EXPOSE $PORT
 
 # Set the entry point
 ENTRYPOINT ["dotnet", "CroHoliCityAPI.dll"]
